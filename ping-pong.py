@@ -29,6 +29,8 @@ class Player(GameSprite):
 player_r = Player('racket.png', 600, 200, 100, 150, 200)
 player_l = Player('racket.png', -20, 200, 100, 150, 200)
 
+ball = GameSprite('ball.png', 200, 200, 5, 50, 50)
+
 win_widht, win_height = 736, 640
 window = display.set_mode((win_widht, win_height))
 display.set_caption('ping-pong')
@@ -39,6 +41,9 @@ finish = False
 clock = time.Clock()
 fps = 60
 
+speed_x = ball.speed
+speed_y = ball.speed
+
 while game:
     for e in event.get():
         if e.type == QUIT:
@@ -46,11 +51,19 @@ while game:
     if finish != True:
         window.blit(background, (0, 0))
 
-        player_l.reset()
-        player_r.reset()
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
 
         player_l.update_l()
         player_r.update_r()
+
+        if ball.rect.y > win_height - 50 or ball.rect.y < 0:
+            speed_y *= -1 
+        if sprite.collide_rect(player_l, ball) or sprite.collide_rect(player_r, ball):
+            speed_x *= -1
+
+        player_l.reset()
+        player_r.reset()
 
     display.update()
     clock.tick(fps)
