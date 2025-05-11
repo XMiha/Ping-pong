@@ -44,6 +44,11 @@ fps = 60
 speed_x = ball.speed
 speed_y = ball.speed
 
+font.init()
+font = font.SysFont('Arial', 35)
+win_r = font.render('Игрок левый', True, (186, 45, 45))
+win_l = font.render('Игрок правый', True, (186, 45, 45))
+
 while game:
     for e in event.get():
         if e.type == QUIT:
@@ -61,6 +66,14 @@ while game:
             speed_y *= -1 
         if sprite.collide_rect(player_l, ball) or sprite.collide_rect(player_r, ball):
             speed_x *= -1
+
+        if ball.rect.x < -50:
+           window.blit(win_r, (260, 100))
+           finish = True
+        if ball.rect.x > 736:
+           window.blit(win_l, (260, 100))
+           finish = True
+
 
         player_l.reset()
         player_r.reset()
